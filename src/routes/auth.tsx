@@ -4,12 +4,13 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 
-type AuthSearch = { redirect?: string };
+type AuthSearch = { redirect?: string | undefined };
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): AuthSearch => ({
     redirect: typeof search["redirect"] === "string" ? search["redirect"] : undefined,
   }),
+
   head: () => ({
     meta: [
       { title: "Entrar — Koodari Lab" },

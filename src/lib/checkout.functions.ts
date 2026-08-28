@@ -101,12 +101,13 @@ export const createOrder = createServerFn({ method: "POST" })
         name: data.customer.name,
         email: data.customer.email,
         cpfCnpj: data.customer.cpfCnpj,
-        phone: data.customer.phone,
+        phone: data.customer.phone ?? null,
         postalCode: data.address.zip,
         address: data.address.street,
         addressNumber: data.address.number,
         province: data.address.district,
       });
+
 
       const dueDate = new Date();
       dueDate.setDate(dueDate.getDate() + (data.paymentMethod === "BOLETO" ? 3 : 1));

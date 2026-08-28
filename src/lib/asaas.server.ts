@@ -21,8 +21,9 @@ export async function asaasFetch<T>(
       access_token: apiKey,
       "User-Agent": "KoodariLab",
     },
-    body: init.body ? JSON.stringify(init.body) : undefined,
+    ...(init.body ? { body: JSON.stringify(init.body) } : {}),
   });
+
 
   const text = await response.text();
   let payload: unknown = null;
