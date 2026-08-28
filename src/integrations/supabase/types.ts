@@ -14,16 +14,323 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      order_items: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          image_url: string | null
+          order_id: string
+          product_name: string
+          quantity: number
+          size: string
+          unit_price_cents: number
+          variant_id: string | null
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          order_id: string
+          product_name: string
+          quantity: number
+          size: string
+          unit_price_cents: number
+          variant_id?: string | null
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          order_id?: string
+          product_name?: string
+          quantity?: number
+          size?: string
+          unit_price_cents?: number
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          address_city: string
+          address_complement: string | null
+          address_district: string
+          address_number: string
+          address_state: string
+          address_street: string
+          address_zip: string
+          asaas_customer_id: string | null
+          asaas_payment_id: string | null
+          boleto_url: string | null
+          created_at: string
+          customer_cpf_cnpj: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          due_date: string | null
+          id: string
+          invoice_url: string | null
+          payment_method: string
+          payment_status: string
+          pix_payload: string | null
+          pix_qr_base64: string | null
+          shipping_cents: number
+          status: string
+          stock_applied: boolean
+          subtotal_cents: number
+          total_cents: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          address_city: string
+          address_complement?: string | null
+          address_district: string
+          address_number: string
+          address_state: string
+          address_street: string
+          address_zip: string
+          asaas_customer_id?: string | null
+          asaas_payment_id?: string | null
+          boleto_url?: string | null
+          created_at?: string
+          customer_cpf_cnpj: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_url?: string | null
+          payment_method: string
+          payment_status?: string
+          pix_payload?: string | null
+          pix_qr_base64?: string | null
+          shipping_cents?: number
+          status?: string
+          stock_applied?: boolean
+          subtotal_cents: number
+          total_cents: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address_city?: string
+          address_complement?: string | null
+          address_district?: string
+          address_number?: string
+          address_state?: string
+          address_street?: string
+          address_zip?: string
+          asaas_customer_id?: string | null
+          asaas_payment_id?: string | null
+          boleto_url?: string | null
+          created_at?: string
+          customer_cpf_cnpj?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_url?: string | null
+          payment_method?: string
+          payment_status?: string
+          pix_payload?: string | null
+          pix_qr_base64?: string | null
+          shipping_cents?: number
+          status?: string
+          stock_applied?: boolean
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      product_variants: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          product_id: string
+          size: string
+          sku: string | null
+          stock: number
+          updated_at: string
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          id?: string
+          product_id: string
+          size: string
+          sku?: string | null
+          stock?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          product_id?: string
+          size?: string
+          sku?: string | null
+          stock?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string
+          fabric_description: string
+          featured: boolean
+          id: string
+          image_url: string | null
+          name: string
+          price_cents: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string
+          fabric_description?: string
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          name: string
+          price_cents: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string
+          fabric_description?: string
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          name?: string
+          price_cents?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          cpf_cnpj: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          cpf_cnpj?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cpf_cnpj?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      shipping_settings: {
+        Row: {
+          flat_rate_cents: number
+          free_above_cents: number
+          id: boolean
+          updated_at: string
+        }
+        Insert: {
+          flat_rate_cents?: number
+          free_above_cents?: number
+          id?: boolean
+          updated_at?: string
+        }
+        Update: {
+          flat_rate_cents?: number
+          free_above_cents?: number
+          id?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +457,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
