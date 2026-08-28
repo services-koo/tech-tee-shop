@@ -86,7 +86,10 @@ function ProductsTab() {
 
   async function updateStock(variantId: string, stock: number) {
     const { error } = await supabase.from("product_variants").update({ stock }).eq("id", variantId);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Estoque atualizado.");
     queryClient.invalidateQueries({ queryKey: ["admin-products"] });
     queryClient.invalidateQueries({ queryKey: ["products"] });
@@ -94,7 +97,10 @@ function ProductsTab() {
 
   async function updateProduct(id: string, patch: { price_cents?: number; active?: boolean }) {
     const { error } = await supabase.from("products").update(patch).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Produto atualizado.");
     queryClient.invalidateQueries({ queryKey: ["admin-products"] });
     queryClient.invalidateQueries({ queryKey: ["products"] });
@@ -174,7 +180,10 @@ function OrdersTab() {
 
   async function setStatus(id: string, status: string) {
     const { error } = await supabase.from("orders").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Pedido atualizado.");
     queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
   }
@@ -229,7 +238,10 @@ function ShippingTab() {
   async function save(patch: { flat_rate_cents?: number; free_above_cents?: number }) {
     if (!data) return;
     const { error } = await supabase.from("shipping_settings").update(patch).eq("id", data.id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Frete atualizado.");
     queryClient.invalidateQueries({ queryKey: ["admin-shipping"] });
     queryClient.invalidateQueries({ queryKey: ["shipping-settings"] });
