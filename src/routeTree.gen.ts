@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as LojaRouteImport } from './routes/loja'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as TecidoRouteImport } from './routes/tecido'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
@@ -44,6 +45,11 @@ const CarrinhoRoute = CarrinhoRouteImport.update({
 const LojaRoute = LojaRouteImport.update({
   id: '/loja',
   path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TecidoRoute = TecidoRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/carrinho': typeof CarrinhoRoute
   '/loja': typeof LojaRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/tecido': typeof TecidoRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/carrinho': typeof CarrinhoRoute
   '/loja': typeof LojaRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/tecido': typeof TecidoRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/carrinho': typeof CarrinhoRoute
   '/loja': typeof LojaRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/tecido': typeof TecidoRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/carrinho'
     | '/loja'
+    | '/reset-password'
     | '/tecido'
     | '/admin'
     | '/checkout'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/carrinho'
     | '/loja'
+    | '/reset-password'
     | '/tecido'
     | '/admin'
     | '/checkout'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/carrinho'
     | '/loja'
+    | '/reset-password'
     | '/tecido'
     | '/_authenticated/admin'
     | '/_authenticated/checkout'
@@ -172,6 +184,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CarrinhoRoute: typeof CarrinhoRoute
   LojaRoute: typeof LojaRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   TecidoRoute: typeof TecidoRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
   ApiPublicAsaasWebhookRoute: typeof ApiPublicAsaasWebhookRoute
@@ -212,6 +225,13 @@ declare module '@tanstack/react-router' {
       path: '/loja'
       fullPath: '/loja'
       preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tecido': {
@@ -289,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CarrinhoRoute: CarrinhoRoute,
   LojaRoute: LojaRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   TecidoRoute: TecidoRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
   ApiPublicAsaasWebhookRoute: ApiPublicAsaasWebhookRoute,
