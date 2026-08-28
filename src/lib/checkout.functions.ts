@@ -147,9 +147,14 @@ export const createOrder = createServerFn({ method: "POST" })
       let pixPayload: string | null = null;
       let pixQrBase64: string | null = null;
       if (data.paymentMethod === "PIX") {
-        const qr = await getAsaasPixQrCode(payment.id);
-        pixPayload = qr.payload ?? null;
-        pixQrBase64 = qr.encodedImage ?? null;
+        try {
+          const qr = await getAsaasPixQrCode(payment.id);
+          pixPayload = qr.payload ?? null;
+          pixQrBase64 = qr.encodedImage ?? null;
+        } catch (qrError) {
+          // Conta Asaas sem chave Pix cadastrada: mantém o pedido válido e usa a fatura.
+          console.error("Falha ao gerar QR Code Pix:", qrError);
+        }
       }
 
       const paid = ["RECEIVED", "CONFIRMED", "RECEIVED_IN_CASH"].includes(payment.status);
