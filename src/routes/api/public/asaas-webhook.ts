@@ -25,10 +25,21 @@ export const Route = createFileRoute("/api/public/asaas-webhook")({
           return new Response("Webhook não configurado", { status: 500 });
         }
 
-        const token = request.headers.get("asaas-access-token") ?? "";
+        const token =
+          request.headers.get("asaas-access-token") ??
+          request.headers.get("asaas-token") ??
+          request.headers.get("access-token") ??
+          request.headers.get("x-asaas-access-token") ??
+          "";
+
         if (token.length !== expectedToken.length || token !== expectedToken) {
+          console.error(
+            `Webhook Asaas rejeitado. Headers recebidos: ${[...request.headers.keys()].join(", ")}. ` +
+              `Tamanho do token recebido: ${token.length}, esperado: ${expectedToken.length}.`,
+          );
           return new Response("Token inválido", { status: 401 });
         }
+
 
         let parsed;
         try {
