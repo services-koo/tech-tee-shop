@@ -30,7 +30,7 @@ function safePath(value: string | undefined): string {
 function AuthPage() {
   const search = useSearch({ from: "/auth" });
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
