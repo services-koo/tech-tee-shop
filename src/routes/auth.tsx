@@ -99,9 +99,13 @@ function AuthPage() {
 
   return (
     <div className="mx-auto max-w-sm px-6 py-20">
-      <h1 className="font-display text-2xl">{mode === "signin" ? "Entrar" : "Criar conta"}</h1>
+      <h1 className="font-display text-2xl">
+        {mode === "signin" ? "Entrar" : mode === "signup" ? "Criar conta" : "Redefinir senha"}
+      </h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Acompanhe seus pedidos e finalize a compra com rapidez.
+        {mode === "reset"
+          ? "Informe seu e-mail e enviaremos um link para criar uma nova senha."
+          : "Acompanhe seus pedidos e finalize a compra com rapidez."}
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
@@ -109,27 +113,47 @@ function AuthPage() {
           <Field label="Nome completo" value={fullName} onChange={setFullName} required />
         ) : null}
         <Field label="E-mail" type="email" value={email} onChange={setEmail} required />
-        <Field label="Senha" type="password" value={password} onChange={setPassword} required />
+        {mode !== "reset" ? (
+          <Field label="Senha" type="password" value={password} onChange={setPassword} required />
+        ) : null}
         <button
           type="submit"
           disabled={loading}
           className="h-11 w-full rounded-sm bg-primary text-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? "Aguarde..." : mode === "signin" ? "Entrar" : "Criar conta"}
+          {loading
+            ? "Aguarde..."
+            : mode === "signin"
+              ? "Entrar"
+              : mode === "signup"
+                ? "Criar conta"
+                : "Enviar link de redefinição"}
         </button>
       </form>
 
-      <button
-        type="button"
-        onClick={handleGoogle}
-        className="mt-4 h-11 w-full rounded-sm border border-border text-sm transition-colors hover:bg-accent"
-      >
-        Continuar com Google
-      </button>
+      {mode !== "reset" ? (
+        <button
+          type="button"
+          onClick={handleGoogle}
+          className="mt-4 h-11 w-full rounded-sm border border-border text-sm transition-colors hover:bg-accent"
+        >
+          Continuar com Google
+        </button>
+      ) : null}
+
+      {mode === "signin" ? (
+        <button
+          type="button"
+          className="mt-6 w-full text-center text-xs text-muted-foreground underline"
+          onClick={() => setMode("reset")}
+        >
+          Esqueci minha senha
+        </button>
+      ) : null}
 
       <button
         type="button"
-        className="mt-6 w-full text-center text-xs text-muted-foreground underline"
+        className="mt-3 w-full text-center text-xs text-muted-foreground underline"
         onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
       >
         {mode === "signin" ? "Não tem conta? Criar agora" : "Já tenho conta"}
