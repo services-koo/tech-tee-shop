@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as TecidoRouteImport } from './routes/tecido'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as AuthenticatedContaRouteImport } from './routes/_authenticated/conta'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
@@ -50,6 +51,11 @@ const TecidoRoute = TecidoRouteImport.update({
   path: '/tecido',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/carrinho': typeof CarrinhoRoute
   '/loja': typeof LojaRoute
   '/tecido': typeof TecidoRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/carrinho': typeof CarrinhoRoute
   '/loja': typeof LojaRoute
   '/tecido': typeof TecidoRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/carrinho': typeof CarrinhoRoute
   '/loja': typeof LojaRoute
   '/tecido': typeof TecidoRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/_authenticated/conta': typeof AuthenticatedContaRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
     | '/carrinho'
     | '/loja'
     | '/tecido'
+    | '/admin'
     | '/checkout'
     | '/conta'
     | '/produto/$slug'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
     | '/carrinho'
     | '/loja'
     | '/tecido'
+    | '/admin'
     | '/checkout'
     | '/conta'
     | '/produto/$slug'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/carrinho'
     | '/loja'
     | '/tecido'
+    | '/_authenticated/admin'
     | '/_authenticated/checkout'
     | '/_authenticated/conta'
     | '/produto/$slug'
@@ -209,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TecidoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/checkout': {
       id: '/_authenticated/checkout'
       path: '/checkout'
@@ -248,12 +267,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
   AuthenticatedContaRoute: typeof AuthenticatedContaRoute
   AuthenticatedPedidoIdRoute: typeof AuthenticatedPedidoIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
   AuthenticatedContaRoute: AuthenticatedContaRoute,
   AuthenticatedPedidoIdRoute: AuthenticatedPedidoIdRoute,
