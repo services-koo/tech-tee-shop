@@ -12,6 +12,7 @@ export function initAnalytics() {
   started = true;
   posthog.init(token, {
     api_host: apiHost,
+    capture_exceptions: true,
     capture_pageview: false,
     capture_pageleave: true,
     autocapture: true,
@@ -41,6 +42,19 @@ export function trackPageview(path: string) {
 export function identifyUser(userId: string, properties?: Record<string, unknown>) {
   if (!started) return;
   posthog.identify(userId, properties);
+}
+
+/** Envia um erro ao Error tracking do PostHog com rota e contexto. */
+export function captureError(error: unknown, context?: Record<string, unknown>) {
+  if (!started) return;
+  const err =
+    error instanceof Error
+      ? error
+      : new Error(typeof error === "string" ? error : "Erro desconhecido");
+  posthog.captureException(err, {
+    route: typeof window !== "undefined" ? window.location.pathname : undefined,
+    ...context,
+  });
 }
 
 export function resetAnalytics() {

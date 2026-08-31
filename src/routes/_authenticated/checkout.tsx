@@ -8,7 +8,7 @@ import { createOrder } from "@/lib/checkout.functions";
 import { useCart } from "@/lib/cart";
 import { formatBRL, onlyDigits } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { track, toBRL } from "@/lib/analytics";
+import { track, toBRL, captureError } from "@/lib/analytics";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
   head: () => ({
@@ -117,6 +117,7 @@ function CheckoutPage() {
       clear();
       navigate({ to: "/pedido/$id", params: { id: result.orderId } });
     } catch (error) {
+      captureError(error, { step: "create_order", payment_method: method });
       toast.error(error instanceof Error ? error.message : "Não foi possível concluir o pedido.");
     } finally {
       setLoading(false);
