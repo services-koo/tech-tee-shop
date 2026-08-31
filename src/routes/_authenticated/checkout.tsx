@@ -8,6 +8,7 @@ import { createOrder } from "@/lib/checkout.functions";
 import { useCart } from "@/lib/cart";
 import { formatBRL, onlyDigits } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { track, toBRL } from "@/lib/analytics";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
   head: () => ({
@@ -103,6 +104,15 @@ function CheckoutPage() {
                 }
               : undefined,
         },
+      });
+      track("order_created", {
+        order_id: result.orderId,
+        payment_method: method,
+        items: items.length,
+        units: items.reduce((sum, i) => sum + i.quantity, 0),
+        subtotal: toBRL(subtotalCents),
+        shipping: toBRL(shippingCents),
+        total: toBRL(subtotalCents + shippingCents),
       });
       clear();
       navigate({ to: "/pedido/$id", params: { id: result.orderId } });

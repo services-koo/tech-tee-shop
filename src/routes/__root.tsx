@@ -16,6 +16,7 @@ import { CartProvider } from "@/lib/cart";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
+import { initAnalytics, trackPageview, identifyUser, resetAnalytics } from "@/lib/analytics";
 
 
 function NotFoundComponent() {
@@ -128,8 +129,23 @@ function RootComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
+    initAnalytics();
+    trackPageview(window.location.pathname);
+    const unsubscribe = router.subscribe("onResolved", ({ toLocation, fromLocation }) => {
+      if (fromLocation?.pathname === toLocation.pathname) return;
+      trackPageview(toLocation.pathname);
+    });
+    return unsubscribe;
+  }, [router]);
+
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      if (event === "SIGNED_OUT") {
+        resetAnalytics();
+      } else if (session?.user) {
+        identifyUser(session.user.id, { email: session.user.email });
+      }
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
