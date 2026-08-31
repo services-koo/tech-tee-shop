@@ -117,6 +117,7 @@ function CheckoutPage() {
       clear();
       navigate({ to: "/pedido/$id", params: { id: result.orderId } });
     } catch (error) {
+      captureError(error, { step: "create_order", payment_method: method });
       toast.error(error instanceof Error ? error.message : "Não foi possível concluir o pedido.");
     } finally {
       setLoading(false);
