@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { refreshOrderPayment } from "@/lib/checkout.functions";
 import { formatBRL, PAYMENT_STATUS_LABEL, PAYMENT_METHOD_LABEL } from "@/lib/format";
-import { track, toBRL } from "@/lib/analytics";
+import { track, toBRL, captureError } from "@/lib/analytics";
 import { useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/_authenticated/pedido/$id")({
