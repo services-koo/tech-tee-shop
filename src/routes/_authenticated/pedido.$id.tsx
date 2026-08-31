@@ -59,7 +59,8 @@ function OrderPage() {
       await refresh({ data: { orderId: id } });
       await orderQuery.refetch();
       toast.success("Status atualizado.");
-    } catch {
+    } catch (error) {
+      captureError(error, { step: "load_order", order_id: id });
       toast.error("Não foi possível atualizar o status.");
     }
   }
