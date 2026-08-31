@@ -22,7 +22,6 @@ export function initAnalytics() {
       maskTextSelector: "*",
     },
   });
-  (window as unknown as Record<string, unknown>)["__ph"] = posthog;
 }
 
 export function isAnalyticsEnabled() {
