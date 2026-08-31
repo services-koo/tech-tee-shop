@@ -16,7 +16,13 @@ import { CartProvider } from "@/lib/cart";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
-import { initAnalytics, trackPageview, identifyUser, resetAnalytics } from "@/lib/analytics";
+import {
+  initAnalytics,
+  trackPageview,
+  identifyUser,
+  resetAnalytics,
+  captureError,
+} from "@/lib/analytics";
 
 
 function NotFoundComponent() {
