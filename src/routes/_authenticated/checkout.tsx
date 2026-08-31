@@ -8,7 +8,7 @@ import { createOrder } from "@/lib/checkout.functions";
 import { useCart } from "@/lib/cart";
 import { formatBRL, onlyDigits } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { track, toBRL } from "@/lib/analytics";
+import { track, toBRL, captureError } from "@/lib/analytics";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
   head: () => ({
