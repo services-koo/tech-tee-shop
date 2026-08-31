@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getShippingSettings } from "@/lib/catalog.functions";
 import { useCart } from "@/lib/cart";
 import { formatBRL } from "@/lib/format";
+import { track, toBRL } from "@/lib/analytics";
 
 export const Route = createFileRoute("/carrinho")({
   head: () => ({
@@ -89,7 +90,17 @@ function CartPage() {
                     <button
                       type="button"
                       className="text-xs text-muted-foreground underline"
-                      onClick={() => removeItem(item.variantId)}
+                      onClick={() => {
+                        track("remove_from_cart", {
+                          variant_id: item.variantId,
+                          slug: item.slug,
+                          name: item.name,
+                          size: item.size,
+                          quantity: item.quantity,
+                          price: toBRL(item.priceCents),
+                        });
+                        removeItem(item.variantId);
+                      }}
                     >
                       Remover
                     </button>
@@ -122,7 +133,16 @@ function CartPage() {
             ) : null}
             <button
               type="button"
-              onClick={() => navigate({ to: "/checkout" })}
+              onClick={() => {
+                track("checkout_started", {
+                  items: items.length,
+                  units: items.reduce((sum, i) => sum + i.quantity, 0),
+                  subtotal: toBRL(subtotalCents),
+                  shipping: toBRL(shippingCents),
+                  total: toBRL(subtotalCents + shippingCents),
+                });
+                navigate({ to: "/checkout" });
+              }}
               className="mt-6 h-11 w-full rounded-sm bg-primary text-sm text-primary-foreground transition-opacity hover:opacity-90"
             >
               Finalizar compra

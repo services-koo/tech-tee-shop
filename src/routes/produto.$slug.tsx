@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -6,6 +6,7 @@ import { getProductBySlug } from "@/lib/catalog.functions";
 import { useCart } from "@/lib/cart";
 import { formatBRL } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { track, toBRL } from "@/lib/analytics";
 
 const productQuery = (slug: string) =>
   queryOptions({
@@ -51,6 +52,15 @@ function ProductPage() {
   const { addItem } = useCart();
   const [variantId, setVariantId] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!product) return;
+    track("product_viewed", {
+      slug: product.slug,
+      name: product.name,
+      price: toBRL(product.price_cents),
+    });
+  }, [product]);
+
   if (!product) return null;
 
   const variant = product.variants.find((v) => v.id === variantId) ?? null;
@@ -69,6 +79,15 @@ function ProductPage() {
       priceCents: product.price_cents,
       imageUrl: product.image_url,
       quantity: 1,
+    });
+    track("add_to_cart", {
+      variant_id: variant.id,
+      slug: product.slug,
+      name: product.name,
+      size: variant.size,
+      color: variant.color,
+      quantity: 1,
+      price: toBRL(product.price_cents),
     });
     toast.success(`${product.name} (${variant.size}) adicionada ao carrinho`);
   }

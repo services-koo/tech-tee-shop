@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { refreshOrderPayment } from "@/lib/checkout.functions";
 import { formatBRL, PAYMENT_STATUS_LABEL, PAYMENT_METHOD_LABEL } from "@/lib/format";
+import { track, toBRL } from "@/lib/analytics";
+import { useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/_authenticated/pedido/$id")({
   head: () => ({
@@ -38,6 +40,19 @@ function OrderPage() {
   });
 
   const order = orderQuery.data;
+  const paidTracked = useRef(false);
+
+  useEffect(() => {
+    if (!order || paidTracked.current) return;
+    const isPaid = ["RECEIVED", "CONFIRMED", "RECEIVED_IN_CASH"].includes(order.payment_status);
+    if (!isPaid) return;
+    paidTracked.current = true;
+    track("order_paid", {
+      order_id: order.id,
+      payment_method: order.payment_method,
+      total: toBRL(order.total_cents),
+    });
+  }, [order]);
 
   async function handleRefresh() {
     try {

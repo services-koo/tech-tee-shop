@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router"
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { track } from "@/lib/analytics";
 
 type AuthSearch = { redirect?: string | undefined };
 
@@ -67,10 +68,12 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        track("signed_up", { method: "email" });
         toast.success("Conta criada! Confirme seu e-mail para continuar.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        track("signed_in", { method: "email" });
       }
       navigate({ to: destination });
     } catch (error) {
@@ -93,6 +96,7 @@ function AuthPage() {
       toast.error("Não foi possível entrar com o Google.");
       return;
     }
+    track("signed_in", { method: "google" });
     if (result.redirected) return;
     navigate({ to: destination });
   }
