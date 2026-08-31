@@ -12,6 +12,7 @@ export function initAnalytics() {
   started = true;
   posthog.init(token, {
     api_host: apiHost,
+    capture_exceptions: true,
     capture_pageview: false,
     capture_pageleave: true,
     autocapture: true,
